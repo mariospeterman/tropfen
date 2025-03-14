@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulsnitztaler Tropfen - Premium-Liköre</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --bg-color: #f9f9f9;
+            --text-color: #333;
+            --secondary-color: #3498db;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(135deg, transparent 25%, white 25%);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-container {
+            margin: 2.5rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .usps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .usp-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .usp-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+        }
+
+        .usp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+        }
+
+        .usp-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 3rem auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            padding: 15px 40px;
+            position: relative;
+            width: 50%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid var(--accent-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .right::after {
+            left: -16px;
+        }
+
+        .progress-section {
+            margin: 2rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background-color: #f0f0f0;
+            border-radius: 12.5px;
+            overflow: hidden;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+            border-radius: 12.5px;
+            transition: width 1.5s ease-in-out;
+            width: 0;
+        }
+
+        .key-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: scale(1.05);
+        }
+
+        .metric-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .right {
+                left: 0%;
+            }
+            
+            .timeline-item::after {
+                left: 15px;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pulsnitztaler Tropfen</h1>
+        <p>Premium-Liköre mit regionaler Identität & limitierter Verfügbarkeit</p>
+    </div>
+
+    <div class="container">
+        <div class="section" data-aos="fade-up">
+            <h2><i class="fas fa-chart-line"></i> Executive Summary</h2>
+            <p>„Pulsnitztaler Tropfen" steht für handwerklich hergestellte Premium-Liköre aus regionalen Früchten der Oberlausitz. Die Marke verbindet traditionelle Rezepturen mit modernem Qualitätsanspruch und einem nostalgischen Design, das an die DDR-Ära erinnert.</p>
+            
+            <div class="stats-container">
+                <div class="stat-card" data-aos="zoom-in">
+                    <i class="fas fa-euro-sign metric-icon"></i>
+                    <div class="stat-number">25.652 €</div>
+                    <p>Startkapital</p>
+                </div>
+                <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fas fa-wine-bottle metric-icon"></i>
+                    <div class="stat-number">400</div>
+                    <p>Flaschen im ersten Jahr</p>
+                </div>
+                <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fas fa-tag metric-icon"></i>
+                    <div class="stat-number">30-35 €</div>
+                    <p>Verkaufspreis pro Flasche</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-aos="fade-up">
+            <h2><i class="fas fa-star"></i> Alleinstellungsmerkmale (USP)</h2>
+            <div class="usps">
+                <div class="usp-card" data-aos="flip-left">
+                    <i class="fas fa-hands usp-icon"></i>
+                    <h3>Regionale Handwerkskunst</h3>
+                    <p>Keine industrielle Produktion, Fokus auf Qualität</p>
+                </div>
+                <div class="usp-card" data-aos="flip-left" data-aos-delay="100">
+                    <i class="fas fa-gem usp-icon"></i>
+                    <h3>Limitierte Verfügbarkeit</h3>
+                    <p>Exklusivität statt Massenmarkt</p>
+                </div>
+                <div class="usp-card" data-aos="flip-left" data-aos-delay="200">
+                    <i class="fas fa-map-marker-alt usp-icon"></i>
+                    <h3>Starke lokale Identität</h3>
+                    <p>Bezug zur Oberlausitz & DDR-inspiriertes Design</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-aos="fade-up">
+            <h2><i class="fas fa-chart-bar"></i> Finanzielle Entwicklung</h2>
+            <div class="chart-container">
+                <canvas id="financialChart"></canvas>
+            </div>
+            
+            <div class="progress-section" data-aos="fade-up">
+                <h3>Projektziele</h3>
+                <p>Break-even Progress</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="breakEvenProgress"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-aos="fade-up">
+            <h2><i class="fas fa-bullseye"></i> Strategische Ziele</h2>
+            <div class="timeline">
+                <div class="timeline-item left" data-aos="fade-right">
+                    <h3>Kurzfristig (1-2 Jahre)</h3>
+                    <p>Aufbau der Marke, Verkauf der ersten Chargen (max. 4000 Flaschen/Jahr)</p>
+                </div>
+                <div class="timeline-item right" data-aos="fade-left">
+                    <h3>Mittelfristig (3-5 Jahre)</h3>
+                    <p>Etablierung als exklusive Marke in Sachsen & angrenzenden Regionen</p>
+                </div>
+                <div class="timeline-item left" data-aos="fade-right">
+                    <h3>Langfristig (5-15 Jahre)</h3>
+                    <p>Ausbau des Netzwerks von Premium-Händlern & exklusiven Vertriebspartnern</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" data-aos="fade-up">
+            <h2><i class="fas fa-key"></i> Key Performance Indicators</h2>
+            <div class="key-metrics">
+                <div class="metric-card">
+                    <i class="fas fa-users metric-icon"></i>
+                    <h3>Kundenzufriedenheit</h3>
+                    <div class="stat-number">98%</div>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-store metric-icon"></i>
+                    <h3>Vertriebspartner</h3>
+                    <div class="stat-number">15+</div>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-award metric-icon"></i>
+                    <h3>Qualitätsstandard</h3>
+                    <div class="stat-number">A+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Financial Chart
+        const ctx = document.getElementById('financialChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Start', 'Q1', 'Q2', 'Q3', 'Q4', 'Jahr 2'],
+                datasets: [{
+                    label: 'Prognostizierter Umsatz',
+                    data: [0, 3000, 6000, 9000, 12000, 24000],
+                    borderColor: '#e74c3c',
+                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Umsatzentwicklung (in €)'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Progress bar animation
+        setTimeout(() => {
+            document.getElementById('breakEvenProgress').style.width = '65%';
+        }, 500);
+
+        // Scroll to top functionality
+        const scrollTop = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
